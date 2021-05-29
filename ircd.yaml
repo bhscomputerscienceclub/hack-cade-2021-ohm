@@ -1,0 +1,8 @@
+network:
+  name: Test
+server:
+  name: Test
+  listen:
+    - ":6667"
+  password: "$2a$04$/E17pEEPnYQs6MznZEQ70u78pMhEOwf6dUKTZYhs14zsl9fvYTnKC"
+
