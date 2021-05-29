@@ -1,0 +1,10 @@
+version: "3.3"
+
+services:
+  eris:
+    image: oragono/oragono
+    volumes:
+      - ./ircd.yml:/ircd.yml
+    ports:
+      - "6667:6667"
+    restart: on-failure
