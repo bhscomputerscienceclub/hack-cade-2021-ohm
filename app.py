@@ -1,14 +1,20 @@
 import pygame
 import random
+import pygame.freetype
+
 fruitx = 500
 fruity = 500
 WIDTH = 800
 HEIGHT = 800
+pygame.init()
+
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Snake 2.0")
+STAT_FONT = pygame.freetype.SysFont('Sans', 50)
 background_surface = pygame.Surface((WIDTH, HEIGHT))
 background_surface.fill((0, 0, 0))
 game_over = False
+hit = False
 
 
 def spawn_fruit():
@@ -48,11 +54,12 @@ class snake:
             if square is not self.body[0]:
                 part = pygame.Rect(square[0], square[1], 20, 20)
                 if head.colliderect(part):
-                    global game_over
+                    global game_over, hit
+                    hit = True
                     game_over = True
 
     def update(self):
-        global game_over
+        global game_over, hit
         count = len(self.body) - 1
         for square in self.body:
             if count == 0:
@@ -60,18 +67,22 @@ class snake:
                     self.body[count][0] += -20
                     if self.body[count][0] < 0:
                         game_over = True
+                        hit = True
                 if self.direction == 2:
                     self.body[count][0] += 20
                     if self.body[count][0] > WIDTH:
                         game_over = True
+                        hit = True
                 if self.direction == 3:
                     self.body[count][1] += -20
                     if self.body[count][1] < 0:
                         game_over = True
+                        hit = True
                 if self.direction == 4:
                     self.body[count][1] += 20
                     if self.body[count][1] > HEIGHT:
                         game_over = True
+                        hit = True
             else:
                 x = self.body[count - 1][0]
                 y = self.body[count - 1][1]
@@ -112,4 +123,14 @@ while not game_over:
                 quit()
     player1.update()
     player1.draw()
+    pygame.display.update()
+
+while True:
+    if hit:
+        text_str = "Game Over!"
+    else:
+        text_str = "Victory!"
+    text_rect = STAT_FONT.get_rect(text_str)
+    text_rect.center = WIN.get_rect().center
+    STAT_FONT.render_to(WIN, text_rect.topleft, text_str, (100, 200, 255))
     pygame.display.update()
