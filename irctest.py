@@ -3,6 +3,7 @@ import irc.bot
 import irc.strings
 from irc.client import ip_numstr_to_quad, ip_quad_to_numstr
 import random
+import time
 
 
 class TestBot(irc.bot.SingleServerIRCBot):
@@ -22,6 +23,7 @@ class TestBot(irc.bot.SingleServerIRCBot):
     def on_pubmsg(self, c, e):
         print(e)
         print('col')
+        print(time.time())
         c.privmsg(e.target,text = "neat")
         return
 
