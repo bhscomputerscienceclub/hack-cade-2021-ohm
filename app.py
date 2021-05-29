@@ -10,7 +10,13 @@ background_surface = pygame.Surface((WIDTH, HEIGHT))
 background_surface.fill((0, 0, 0))
 game_over = False
 
+COLORS = ["00ff00", "0000ff"]
+hex2rgb = lambda h: tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
 
+
+def start_pos():
+    # TODO @kareem make this so ppl don't overlap with existing?
+    return 0,0
 def spawn_fruit():
     global fruity, fruitx
     fruitx = random.randrange(0, WIDTH, 20)
@@ -90,26 +96,27 @@ class snake:
         self.hit(self.body[0])
 
 
-player1 = snake(0, 0)
-while not game_over:
-    clock = pygame.time.Clock()
-    clock.tick(30)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            quit()
-        elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                player1.left()
-            elif event.key == pygame.K_RIGHT:
-                player1.right()
-            elif event.key == pygame.K_UP:
-                player1.up()
-            elif event.key == pygame.K_DOWN:
-                player1.down()
-            elif event.key == pygame.K_ESCAPE:
+if __name__ == "__main__":
+    player1 = snake(0, 0)
+    while not game_over:
+        clock = pygame.time.Clock()
+        clock.tick(30)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-    player1.update()
-    player1.draw()
-    pygame.display.update()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    player1.left()
+                elif event.key == pygame.K_RIGHT:
+                    player1.right()
+                elif event.key == pygame.K_UP:
+                    player1.up()
+                elif event.key == pygame.K_DOWN:
+                    player1.down()
+                elif event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                    quit()
+        player1.update()
+        player1.draw()
+        pygame.display.update()
