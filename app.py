@@ -16,12 +16,23 @@ background_surface.fill((0, 0, 0))
 game_over = False
 hit = False
 
-COLORS = ["00ff00", "0000ff"]
-hex2rgb = lambda h: tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
 
 
 def start_pos():
-    return 0,0
+    x1 = random.randrange(0, WIDTH, 20)
+    y1 = random.randrange(0, HEIGHT, 20)
+    x2 = random.randrange(0, WIDTH, 20)
+    y2 = random.randrange(0, HEIGHT, 20)
+    if x1 is not x2 and y1 is not y2:
+        return x1, y1, x2, y2
+    while x1 == x2 or y1 == y2:
+        x1 = random.randrange(0, WIDTH, 20)
+        y1 = random.randrange(0, HEIGHT, 20)
+        x2 = random.randrange(0, WIDTH, 20)
+        y2 = random.randrange(0, HEIGHT, 20)
+    return x1, y1, x2, y2
+
+
 def spawn_fruit():
     global fruity, fruitx
     fruitx = random.randrange(0, WIDTH, 20)
@@ -54,14 +65,23 @@ class snake:
         self.direction = 4
 
     def hit(self, head_coords):
+        global game_over, hit
         head = pygame.Rect(head_coords[0], head_coords[1], 20, 20)
         for square in self.body:
             if square is not self.body[0]:
                 part = pygame.Rect(square[0], square[1], 20, 20)
                 if head.colliderect(part):
-                    global game_over, hit
                     hit = True
                     game_over = True
+        for square in player2.body:
+            if square is not player2.body[0]:
+                part = pygame.Rect(square[0], square[1], 20, 20)
+                if head.colliderect(part):
+                    hit = False
+                    game_over = True
+            else:
+                hit = True
+                game_over = True
 
     def update(self):
         global game_over, hit
@@ -107,7 +127,10 @@ class snake:
 
 
 if __name__ == "__main__":
-    player1 = snake(0, 0)
+    x1, y1, x2, y2 = start_pos()
+    print(x1, y1, x2, y2)
+    player1 = snake(x1, y1)
+    player2 = snake(x2, y2)
     while not game_over:
         clock = pygame.time.Clock()
         clock.tick(30)
@@ -128,11 +151,21 @@ if __name__ == "__main__":
                     pygame.quit()
                     quit()
         player1.update()
+        player2.update()
         player1.draw()
+        player2.draw()
         pygame.display.update()
 
 
 while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            quit()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                quit()
     if hit:
         text_str = "Game Over!"
     else:
