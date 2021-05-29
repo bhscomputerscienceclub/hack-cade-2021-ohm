@@ -1,39 +1,47 @@
-
-import irc.bot
-import irc.strings
-from irc.client import ip_numstr_to_quad, ip_quad_to_numstr
+import miniirc_extras
+import miniirc
 import random
 import time
 
 
-class TestBot(irc.bot.SingleServerIRCBot):
-    def __init__(self, channel, nickname, server, port=6667):
-        irc.bot.SingleServerIRCBot.__init__(self, [(server, port)], nickname, nickname)
-        self.channel = channel
-
-    def on_nicknameinuse(self, c, e):
-        c.nick(c.get_nickname() + str(random.randint(1,10000)))
-
-    def on_welcome(self, c, e):
-        c.join(self.channel)
-
-    def on_privmsg(self, c, e):
-        self.do_command(e, e.arguments[0])
-
-    def on_pubmsg(self, c, e):
-        print(e)
-        print('col')
-        print(time.time())
-        c.privmsg(e.target,text = "neat")
-        return
+irc = None
+code = ""
+handle = None
 
 
-def main():
-    import sys
+def init(codee: int = None):
+    nick = str(random.randint(100000, 100000000))
+    if codee == None:
+        codee = "#" + str(random.randint(1000000, 100000000))
+    else:
+        codee = "#" + str(codee)
+    global code, irc
+    code = codee
+    irc = miniirc.IRC("10.13.13.2", 6667, nick, [code], auto_connect=False)
+    irc.require("users")
+    irc.connect()
+    return irc
 
-    bot = TestBot('#hello', 'thisbot', '10.13.13.2', 6667)
-    bot.start()
 
+def twoppl() -> bool:
+    return len(irc.users._users) == 2
+
+
+def send(i: int):
+    irc.msg(code, str(i))
+
+def handle(handler):
+    global handle
+    handle = handler
 
 if __name__ == "__main__":
-    main()
+    init(123)
+    while not twoppl():
+        time.sleep(0.1)
+    handle(lambda x: print(x))
+    print("other person joined")
+
+
+@miniirc.Handler("PRIVMSG", colon=False)
+def handler(irc: miniirc.IRC, hostmask: tuple, args):
+    handle(int(args[1]))
