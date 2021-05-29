@@ -45,7 +45,7 @@ class snake:
     def hit(self, head_coords):
         head = pygame.Rect(head_coords[0], head_coords[1], 20, 20)
         for square in self.body:
-            if square is not head_coords:
+            if square is not self.body[0]:
                 part = pygame.Rect(square[0], square[1], 20, 20)
                 if head.colliderect(part):
                     global game_over
