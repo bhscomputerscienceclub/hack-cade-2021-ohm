@@ -51,10 +51,11 @@ def start_pos():
 def spawn_fruit():
     global fruity, fruitx
     if player == 2:
-        return irc.spawn_fruit()
+        fruitx, fruity = irc.spawn_fruit()
+        return
     fruitx = random.randrange(0, WIDTH, 20)
     fruity = random.randrange(0, HEIGHT, 20)
-    irc.fruit = (fruitx,fruity)
+    irc.set_fruit(fruitx, fruity)
 
 
 class snake:
@@ -244,6 +245,7 @@ def main():
 
 
 if __name__ == "__main__":
+    clock = pygame.time.Clock()
     global code, join, input_code
     main()
     finalcode = 1
@@ -259,18 +261,21 @@ if __name__ == "__main__":
     time.sleep(1)
     if irc.twoppl():
         player = 2
-    else:
-        spawn_fruit()
-        print(fruitx,fruity)
     while not irc.twoppl():
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit_func()
         WIN.fill((0, 0, 0))
         txt_surface = STAT_FONT.render("Waiting...", True, (255, 255, 255))
         WIN.blit(txt_surface, (250, 200))
         pygame.display.update()
-        time.sleep(0.1)
-
+        clock.tick(5)
+    print(0)
+    spawn_fruit()
+    print("A")
     x1, y1, x2, y2 = start_pos()
-    print(x1,y1,x2,y2)
+    print(x1, y1, x2, y2)
+    print(fruitx, fruity)
     player1 = snake(x1, y1, 1)
     player2 = snake(x2, y2, 2)
     while not game_over:

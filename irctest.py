@@ -14,7 +14,7 @@ fruit = None
 
 def init(codee: int = None):
     nick = str(random.randint(100000, 100000000))
-    if codee == None:
+    if codee is None:
         codee = "#" + str(random.randint(1000000, 100000000))
     else:
         codee = "#" + str(codee)
@@ -41,7 +41,7 @@ def senddir(i: int):
 
 def start_pos() -> Tuple[int,int,int,int]:
     global start_poss
-    if start_poss == None:
+    if start_poss is None:
         irc.msg(code, "getstart")
     while start_poss is None:
         time.sleep(0.01)
@@ -55,12 +55,20 @@ def set_start_pos(a:int, b:int, c:int, d:int):
 
 
 def send_start_pos():
-    irc.msg(code, "start " + " ".join([str(i) for i in start_poss + fruit]))
+    irc.msg(code, "start " + " ".join([str(i) for i in start_poss + spawn_fruit()]))
 
 def spawn_fruit():
     global fruit
-    return fruit
+    while fruit is None:
+        time.sleep(0.01)
+        print("WAITING FOR FRUIT")
 
+    print("GOTFRUIT")
+    return fruit
+def set_fruit(a,b):
+    global fruit
+    irc.msg(code, "fruit " + str(a) + " " + str(b))
+    fruit = (a,b)
 
 if __name__ == "__main__":
     init(123)
