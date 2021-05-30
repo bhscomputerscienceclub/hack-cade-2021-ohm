@@ -21,11 +21,7 @@ player2won = False
 player = 1
 
 
-def wait():
-
-
-
-def quit():
+def quit_func():
     pygame.quit()
     irc.irc.disconnect()
     exit()
@@ -183,7 +179,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
-                quit()
+                quit_func()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if input_box.collidepoint(event.pos):
                     active = not active
@@ -244,7 +240,7 @@ if __name__ == "__main__":
                 clock.tick(9)
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
-                        quit()
+                        quit_func()
                     elif event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_LEFT:
                             player1.left()
@@ -255,7 +251,7 @@ if __name__ == "__main__":
                         elif event.key == pygame.K_DOWN:
                             player1.down()
                         elif event.key == pygame.K_ESCAPE:
-                            quit()
+                            quit_func()
 
                 irc.send(player1.direction)
                 player2.direction = irc.actions[-1]
@@ -265,6 +261,8 @@ if __name__ == "__main__":
                 player1.draw()
                 player2.draw()
                 pygame.display.update()
+        else:
+            quit_func()
     else:
         if code is not None:
             if code is not None:
@@ -277,7 +275,7 @@ if __name__ == "__main__":
                     clock.tick(9)
                     for event in pygame.event.get():
                         if event.type == pygame.QUIT:
-                            quit()
+                            quit_func()
                         elif event.type == pygame.KEYDOWN:
                             if event.key == pygame.K_LEFT:
                                 player1.left()
@@ -288,7 +286,7 @@ if __name__ == "__main__":
                             elif event.key == pygame.K_DOWN:
                                 player1.down()
                             elif event.key == pygame.K_ESCAPE:
-                                quit()
+                                quit_func()
 
                     irc.send(player1.direction)
                     player2.direction = irc.actions[-1]
@@ -298,6 +296,8 @@ if __name__ == "__main__":
                     player1.draw()
                     player2.draw()
                     pygame.display.update()
+        else:
+            quit_func()
 
 text_str = ""
 if player == 1 and player1won is True:
@@ -313,15 +313,15 @@ while True:
     button = pygame.Rect(300, 350, 150, 50)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            quit()
+            quit_func()
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
-                quit()
+                quit_func()
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if button.collidepoint(event.pos):
-                quit()
+                quit_func()
     txt_surface = STAT_FONT.render(text_str, True, (255, 255, 255))
-    txt_surface1 = STAT_FONT.render("Quit", True, (255, 255, 255))
+    txt_surface1 = STAT_FONT.render("Quit1", True, (255, 255, 255))
     WIN.blit(txt_surface, (300, 250))
     pygame.draw.rect(WIN, [0, 0, 0], button)
     WIN.blit(txt_surface1, (button.x+5, button.y+5))
