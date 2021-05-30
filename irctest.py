@@ -17,7 +17,7 @@ def init(codee: int = None):
         codee = "#" + str(codee)
     global code, irc
     code = codee
-    irc = miniirc.IRC("10.13.13.2", 6667, nick, [code], auto_connect=False)
+    irc = miniirc.IRC("a.linode.servers.malhotra.cc", 29615, nick, [code], auto_connect=False)
     irc.require("users")
     irc.connect()
     return irc
