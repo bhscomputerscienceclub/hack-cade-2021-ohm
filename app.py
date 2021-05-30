@@ -181,7 +181,6 @@ if __name__ == "__main__":
                     pygame.quit()
                     quit()
 
-        print(player1.direction)
         irc.send(player1.direction)
         player2.direction = irc.actions[-1]
         player1.update()
