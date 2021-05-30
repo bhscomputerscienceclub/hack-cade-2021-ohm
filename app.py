@@ -14,7 +14,7 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Snake 2.0")
 STAT_FONT = pygame.font.Font(None, 32)
 background_surface = pygame.Surface((WIDTH, HEIGHT))
-background_surface.fill((0, 0, 0))
+background_surface.fill((30, 30, 30))
 game_over = False
 hit = False
 player1won = False
@@ -89,7 +89,7 @@ class snake:
         self.direction = 4
 
     def hit(self):
-        global game_over, hit, player2won, player1won
+        global game_over, player2won, player1won
         head = pygame.Rect(self.body[0][0], self.body[0][1], 20, 20)
         for square in self.body:
             if square is not self.body[0]:
@@ -118,7 +118,7 @@ class snake:
                     game_over = True
 
     def update(self):
-        global game_over, hit, player2won, player1won
+        global game_over, player2won, player1won
         count = len(self.body) - 1
         for square in self.body:
             if count == 0:
@@ -162,16 +162,21 @@ class snake:
         if pygame.Rect(self.body[0][0], self.body[0][1], 20, 20).colliderect(
             pygame.Rect(fruitx, fruity, 20, 20)
         ):
-            if self.direction == 1:
-                self.body.insert(0, [self.body[0][0] - 20, self.body[0][1]])
-            elif self.direction == 2:
-                self.body.insert(0, [self.body[0][0] + 20, self.body[0][1]])
-            elif self.direction == 3:
-                self.body.insert(0, [self.body[0][0], self.body[0][1] + 20])
-            elif self.direction == 4:
-                self.body.insert(0, [self.body[0][0], self.body[0][1] - 20])
+            last = self.body[-1]
+            if len(self.body) < 2:
+                if self.direction == 1:
+                    self.body.append([last[0] + 20, last[1]])
+                elif self.direction == 2:
+                    self.body.append([self.body[0][0] - 20, self.body[0][1]])
+                elif self.direction == 3:
+                    self.body.append([self.body[0][0], self.body[0][1] - 20])
+                elif self.direction == 4:
+                    self.body.append([self.body[0][0], self.body[0][1] + 20])
+            else:
+                x_dif = self.body[-2][0] - last[0]
+                y_dif = self.body[-2][1] - last[1]
+                self.body.append([last[0] - x_dif, last[1] - y_dif])
             spawn_fruit()
-            print(fruitx,fruity)
         self.hit()
 
 
@@ -198,7 +203,7 @@ def main():
                 else:
                     active = False
                     if button.collidepoint(event.pos):
-                        WIN.fill((0, 0, 0))
+                        WIN.fill((30, 30, 30))
                         code = random.randint(0, 999999)
                         text = STAT_FONT.render(f"Join code: {code}", True, color)
                         clicked = False
@@ -258,7 +263,7 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit_func()
-        WIN.fill((0, 0, 0))
+        WIN.fill((30, 30, 30))
         txt_surface = STAT_FONT.render("Waiting...", True, (255, 255, 255))
         WIN.blit(txt_surface, (250, 200))
         pygame.display.update()
@@ -273,7 +278,7 @@ if __name__ == "__main__":
     player2 = snake(x2, y2, 2)
     while not game_over:
         clock = pygame.time.Clock()
-        clock.tick(9)
+        clock.tick(5)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()

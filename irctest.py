@@ -29,7 +29,7 @@ def init(codee: int = None):
 
 
 def twoppl() -> bool:
-    return len(irc.users._users) == 2
+    return len(irc.users._users) == 3
 
 
 def senddir(i: int):
