@@ -87,7 +87,7 @@ class snake:
                     else:
                         player1won = True
                     game_over = True
-            else:
+            elif square is not self.body[0]:
                 if head.colliderect(part):
                     if self.player == 1:
                         player2won = False
