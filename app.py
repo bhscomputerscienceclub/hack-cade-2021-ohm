@@ -212,7 +212,6 @@ def main():
                         input_code = input_code[:-1]
                     else:
                         input_code += event.unicode
-
         screen.fill((30, 30, 30))
         pygame.draw.rect(screen, [255, 255, 255], button)
         txt_surface = STAT_FONT.render(input_code, True, color)
@@ -239,9 +238,10 @@ if __name__ == "__main__":
     irc.init(finalcode)
     if irc.twoppl(): player = 2
     while not irc.twoppl():
-        print('waiting...')
-        #TODO @kareem graphic this loop
-        time.sleep(0.1)
+        WIN.fill((0, 0, 0))
+        txt_surface = STAT_FONT.render("Waiting...", True, (255, 255, 255))
+        WIN.blit(txt_surface, (250, 200))
+        pygame.display.update()
 
     x1, y1, x2, y2 = start_pos()
     player1 = snake(x1, y1, 1)
