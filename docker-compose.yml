@@ -4,7 +4,7 @@ services:
   eris:
     image: oragono/oragono
     volumes:
-      - ./ircd.yml:/ircd.yml
+      - ./ircd.yaml:/ircd.yml:ro
     ports:
       - "6667:6667"
     restart: on-failure

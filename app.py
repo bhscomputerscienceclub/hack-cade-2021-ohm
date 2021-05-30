@@ -1,6 +1,7 @@
 import pygame
 import random
 import pygame.freetype
+import irctest as irc
 
 fruitx = 500
 fruity = 500
@@ -10,7 +11,7 @@ pygame.init()
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Snake 2.0")
-STAT_FONT = pygame.freetype.SysFont('Sans', 50)
+STAT_FONT = pygame.freetype.SysFont("Sans", 50)
 background_surface = pygame.Surface((WIDTH, HEIGHT))
 background_surface.fill((0, 0, 0))
 game_over = False
@@ -42,7 +43,6 @@ def spawn_fruit():
 
 
 class snake:
-
     def __init__(self, start_x, start_y, player):
         self.direction = 0 # 0 is not moving 1 is left 2 is right 3 is up 4 is down
         self.body = []
@@ -141,7 +141,9 @@ class snake:
                 y = self.body[count - 1][1]
                 self.body[count] = [x, y]
             count -= 1
-        if pygame.Rect(self.body[0][0], self.body[0][1], 20, 20).colliderect(pygame.Rect(fruitx, fruity, 20, 20)):
+        if pygame.Rect(self.body[0][0], self.body[0][1], 20, 20).colliderect(
+            pygame.Rect(fruitx, fruity, 20, 20)
+        ):
             if self.direction == 1:
                 self.body.insert(0, [self.body[0][0] - 20, self.body[0][1]])
             elif self.direction == 2:
@@ -155,12 +157,13 @@ class snake:
 
 
 if __name__ == "__main__":
+    irc.init(123) 
     x1, y1, x2, y2 = start_pos()
     player1 = snake(x1, y1, 1)
     player2 = snake(x2, y2, 2)
     while not game_over:
         clock = pygame.time.Clock()
-        clock.tick(30)
+        clock.tick(9)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -177,6 +180,10 @@ if __name__ == "__main__":
                 elif event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     quit()
+
+        print(player1.direction)
+        irc.send(player1.direction)
+        player2.direction = irc.actions[-1]
         player1.update()
         player2.update()
         WIN.blit(background_surface, (0, 0))
@@ -194,7 +201,7 @@ while True:
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 quit()
-    text_str = ''
+    text_str = ""
     if player == 1 and player1won is True:
         text_str = "You Win!"
     elif player == 1 and player1won is False:

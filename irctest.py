@@ -6,8 +6,8 @@ import time
 
 irc = None
 code = ""
-actions: list[int] = []
-
+actions: list[int] = [0]
+prevsend = 0
 
 def init(codee: int = None):
     nick = str(random.randint(100000, 100000000))
@@ -28,7 +28,10 @@ def twoppl() -> bool:
 
 
 def send(i: int):
-    irc.msg(code, str(i))
+    global prevsend
+    if i != prevsend:
+        irc.msg(code, str(i))
+        prevsend = i
 
 
 if __name__ == "__main__":
@@ -42,4 +45,5 @@ if __name__ == "__main__":
 
 @miniirc.Handler("PRIVMSG", colon=False)
 def handler(irc: miniirc.IRC, hostmask: tuple, args):
+    print("A")
     actions.append(int(args[1]))
