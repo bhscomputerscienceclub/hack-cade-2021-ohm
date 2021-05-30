@@ -176,6 +176,7 @@ class snake:
             elif self.direction == 4:
                 self.body.insert(0, [self.body[0][0], self.body[0][1] - 20])
             spawn_fruit()
+            print(fruitx,fruity)
         self.hit()
 
 
@@ -260,6 +261,7 @@ if __name__ == "__main__":
         player = 2
     else:
         spawn_fruit()
+        print(fruitx,fruity)
     while not irc.twoppl():
         WIN.fill((0, 0, 0))
         txt_surface = STAT_FONT.render("Waiting...", True, (255, 255, 255))
@@ -268,6 +270,7 @@ if __name__ == "__main__":
         time.sleep(0.1)
 
     x1, y1, x2, y2 = start_pos()
+    print(x1,y1,x2,y2)
     player1 = snake(x1, y1, 1)
     player2 = snake(x2, y2, 2)
     while not game_over:

@@ -45,7 +45,7 @@ def start_pos() -> Tuple[int,int,int,int]:
         irc.msg(code, "getstart")
     while start_poss is None:
         time.sleep(0.01)
-    return tuple(start_poss[1:] + start_poss[:1])
+    return tuple(start_poss[2:] + start_poss[:2])
 
 
 def set_start_pos(a:int, b:int, c:int, d:int):
