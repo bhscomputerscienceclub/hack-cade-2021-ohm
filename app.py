@@ -7,7 +7,7 @@ import time
 fruitx = 500
 fruity = 500
 WIDTH = 800
-HEIGHT = 800
+HEIGHT = 600
 pygame.init()
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -32,18 +32,12 @@ def quit_func():
 def start_pos():
     if player == 2:
         return irc.start_pos()
-    x1 = random.randrange(0, WIDTH, 20)
-    y1 = random.randrange(0, HEIGHT, 20)
-    x2 = random.randrange(0, WIDTH, 20)
-    y2 = random.randrange(0, HEIGHT, 20)
-    if x1 is not x2 and y1 is not y2:
-        irc.set_start_pos(x1,y1,x2,y2)
-        return x1, y1, x2, y2
-    while x1 == x2 or y1 == y2:
-        x1 = random.randrange(0, WIDTH, 20)
-        y1 = random.randrange(0, HEIGHT, 20)
-        x2 = random.randrange(0, WIDTH, 20)
-        y2 = random.randrange(0, HEIGHT, 20)
+    x1 = 40
+    y1 = 140
+    x2 = WIDTH - 40
+    y2 = HEIGHT - 140
+    print(f"Width: {WIN.get_width()} Height {WIN.get_height()}")
+
     irc.set_start_pos(x1,y1,x2,y2)
     return x1, y1, x2, y2
 
@@ -183,7 +177,6 @@ class snake:
 
 def main():
     global code, done, input_code, join
-    screen = pygame.display.set_mode((640, 480))
     clock = pygame.time.Clock()
     input_box = pygame.Rect(100, 100, 140, 32)
     color_inactive = pygame.Color("lightskyblue3")
@@ -210,7 +203,7 @@ def main():
                         text = STAT_FONT.render(f"Join code: {code}", True, color)
                         clicked = False
                         while True:
-                            screen.blit(text, (input_box.x + 5, input_box.y - 25))
+                            WIN.blit(text, (input_box.x + 5, input_box.y - 25))
                             pygame.display.update()
                             for event in pygame.event.get():
                                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -229,17 +222,17 @@ def main():
                         input_code = input_code[:-1]
                     else:
                         input_code += event.unicode
-        screen.fill((30, 30, 30))
-        pygame.draw.rect(screen, [255, 255, 255], button)
+        WIN.fill((30, 30, 30))
+        pygame.draw.rect(WIN, [255, 255, 255], button)
         txt_surface = STAT_FONT.render(input_code, True, color)
         txt_surface2 = STAT_FONT.render("Enter Code:", True, color)
         txt_surface3 = STAT_FONT.render("Create Game", True, (0, 0, 0))
         width = max(200, txt_surface.get_width() + 10)
         input_box.w = width
-        screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
-        screen.blit(txt_surface2, (input_box.x + 5, input_box.y - 25))
-        screen.blit(txt_surface3, (button.x + 5, button.y + 10))
-        pygame.draw.rect(screen, color, input_box, 2)
+        WIN.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
+        WIN.blit(txt_surface2, (input_box.x + 5, input_box.y - 25))
+        WIN.blit(txt_surface3, (button.x + 5, button.y + 10))
+        pygame.draw.rect(WIN, color, input_box, 2)
         pygame.display.flip()
         clock.tick(30)
 
@@ -324,7 +317,7 @@ while True:
             if button.collidepoint(event.pos):
                 quit_func()
     txt_surface = STAT_FONT.render(text_str, True, (255, 255, 255))
-    txt_surface1 = STAT_FONT.render("Quit1", True, (255, 255, 255))
+    txt_surface1 = STAT_FONT.render("Quit", True, (255, 255, 255))
     WIN.blit(txt_surface, (300, 250))
     pygame.draw.rect(WIN, [0, 0, 0], button)
     WIN.blit(txt_surface1, (button.x + 5, button.y + 5))
