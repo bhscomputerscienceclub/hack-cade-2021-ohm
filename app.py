@@ -15,8 +15,9 @@ background_surface = pygame.Surface((WIDTH, HEIGHT))
 background_surface.fill((0, 0, 0))
 game_over = False
 hit = False
-
-
+player1won = False
+player2won = False
+player = 1
 
 def start_pos():
     x1 = random.randrange(0, WIDTH, 20)
@@ -40,10 +41,11 @@ def spawn_fruit():
 
 
 class snake:
-    body = []
-    direction = 0 # 0 is not moving 1 is left 2 is right 3 is up 4 is down
 
-    def __init__(self, start_x, start_y):
+    def __init__(self, start_x, start_y, player):
+        self.direction = 0 # 0 is not moving 1 is left 2 is right 3 is up 4 is down
+        self.player = player
+        self.body = []
         self.body.append([start_x, start_y])
 
     def draw(self):
@@ -64,24 +66,34 @@ class snake:
     def down(self):
         self.direction = 4
 
-    def hit(self, head_coords):
-        global game_over, hit
-        head = pygame.Rect(head_coords[0], head_coords[1], 20, 20)
+    def hit(self):
+        global game_over, hit, player2won, player1won
+        head = pygame.Rect(self.body[0][0], self.body[0][1], 20, 20)
         for square in self.body:
             if square is not self.body[0]:
                 part = pygame.Rect(square[0], square[1], 20, 20)
                 if head.colliderect(part):
-                    hit = True
+                    if self.player == 1:
+                        player2won = True
+                    else:
+                        player1won = True
                     game_over = True
         for square in player2.body:
+            part = pygame.Rect(square[0], square[1], 20, 20)
             if square is not player2.body[0]:
-                part = pygame.Rect(square[0], square[1], 20, 20)
                 if head.colliderect(part):
-                    hit = False
+                    if self.player == 1:
+                        player2won = True
+                    else:
+                        player1won = True
                     game_over = True
             else:
-                hit = True
-                game_over = True
+                if head.colliderect(part):
+                    if self.player == 1:
+                        player2won = False
+                    else:
+                        player1won = False
+                    game_over = True
 
     def update(self):
         global game_over, hit
@@ -92,22 +104,18 @@ class snake:
                     self.body[count][0] += -20
                     if self.body[count][0] < 0:
                         game_over = True
-                        hit = True
                 if self.direction == 2:
                     self.body[count][0] += 20
                     if self.body[count][0] > WIDTH:
                         game_over = True
-                        hit = True
                 if self.direction == 3:
                     self.body[count][1] += -20
                     if self.body[count][1] < 0:
                         game_over = True
-                        hit = True
                 if self.direction == 4:
                     self.body[count][1] += 20
                     if self.body[count][1] > HEIGHT:
                         game_over = True
-                        hit = True
             else:
                 x = self.body[count - 1][0]
                 y = self.body[count - 1][1]
@@ -123,14 +131,14 @@ class snake:
             elif self.direction == 4:
                 self.body.insert(0, [self.body[0][0], self.body[0][1] - 20])
             spawn_fruit()
-        self.hit(self.body[0])
+        self.hit()
 
 
 if __name__ == "__main__":
     x1, y1, x2, y2 = start_pos()
     print(x1, y1, x2, y2)
-    player1 = snake(x1, y1)
-    player2 = snake(x2, y2)
+    player1 = snake(x1, y1, 1)
+    player2 = snake(x2, y2, 2)
     while not game_over:
         clock = pygame.time.Clock()
         clock.tick(30)
@@ -166,10 +174,15 @@ while True:
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 quit()
-    if hit:
+    text_str = ''
+    if player == 1 and player1won is True:
+        text_str = "You Win!"
+    elif player == 1 and player1won is False:
         text_str = "Game Over!"
-    else:
-        text_str = "Victory!"
+    elif player == 2 and player2won is True:
+        text_str = "You Win!"
+    elif player == 2 and player2won is False:
+        text_str = "Game Over!"
     text_rect = STAT_FONT.get_rect(text_str)
     text_rect.center = WIN.get_rect().center
     STAT_FONT.render_to(WIN, text_rect.topleft, text_str, (100, 200, 255))
