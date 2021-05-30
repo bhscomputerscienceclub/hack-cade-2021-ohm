@@ -6,7 +6,7 @@ import time
 
 irc = None
 code = ""
-handle = None
+actions: list[int] = []
 
 
 def init(codee: int = None):
@@ -30,18 +30,16 @@ def twoppl() -> bool:
 def send(i: int):
     irc.msg(code, str(i))
 
-def handle(handler):
-    global handle
-    handle = handler
 
 if __name__ == "__main__":
     init(123)
     while not twoppl():
         time.sleep(0.1)
-    handle(lambda x: print(x))
     print("other person joined")
+    while True:
+        print(actions[-1])
 
 
 @miniirc.Handler("PRIVMSG", colon=False)
 def handler(irc: miniirc.IRC, hostmask: tuple, args):
-    handle(int(args[1]))
+    actions.append(int(args[1]))
