@@ -49,7 +49,6 @@ class snake:
         self.body.append([start_x, start_y])
 
     def draw(self):
-        WIN.blit(background_surface, (0, 0))
         for square_coords in self.body:
             pygame.draw.rect(WIN, (0, 255, 0), pygame.Rect(square_coords[0], square_coords[1], 20, 20))
         pygame.draw.rect(WIN, (255, 0, 0), pygame.Rect(fruitx, fruity, 20, 20))
@@ -160,8 +159,10 @@ if __name__ == "__main__":
                     quit()
         player1.update()
         player2.update()
+        WIN.blit(background_surface, (0, 0))
         player1.draw()
         player2.draw()
+        print(player1.body)
         pygame.display.update()
 
 
