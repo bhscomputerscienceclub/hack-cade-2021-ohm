@@ -319,7 +319,7 @@ while True:
             if button.collidepoint(event.pos):
                 quit_func()
     txt_surface = STAT_FONT.render(text_str, True, (255, 255, 255))
-    txt_surface1 = STAT_FONT.render("Quit1", True, (255, 255, 255))
+    txt_surface1 = STAT_FONT.render("Quit", True, (255, 255, 255))
     WIN.blit(txt_surface, (300, 250))
     pygame.draw.rect(WIN, [0, 0, 0], button)
     WIN.blit(txt_surface1, (button.x + 5, button.y + 5))
