@@ -21,6 +21,11 @@ player2won = False
 player = 1
 
 
+def quit():
+    pygame.quit()
+    irc.irc.disconnect()
+    exit()
+
 def start_pos():
     x1 = random.randrange(0, WIDTH, 20)
     y1 = random.randrange(0, HEIGHT, 20)
@@ -173,7 +178,6 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
-                pygame.quit()
                 quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if input_box.collidepoint(event.pos):
@@ -235,7 +239,6 @@ if __name__ == "__main__":
                 clock.tick(9)
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
-                        pygame.quit()
                         quit()
                     elif event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_LEFT:
@@ -247,7 +250,6 @@ if __name__ == "__main__":
                         elif event.key == pygame.K_DOWN:
                             player1.down()
                         elif event.key == pygame.K_ESCAPE:
-                            pygame.quit()
                             quit()
 
                 irc.send(player1.direction)
@@ -270,7 +272,6 @@ if __name__ == "__main__":
                     clock.tick(9)
                     for event in pygame.event.get():
                         if event.type == pygame.QUIT:
-                            pygame.quit()
                             quit()
                         elif event.type == pygame.KEYDOWN:
                             if event.key == pygame.K_LEFT:
@@ -282,7 +283,6 @@ if __name__ == "__main__":
                             elif event.key == pygame.K_DOWN:
                                 player1.down()
                             elif event.key == pygame.K_ESCAPE:
-                                pygame.quit()
                                 quit()
 
                     irc.send(player1.direction)
@@ -298,11 +298,9 @@ if __name__ == "__main__":
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            pygame.quit()
             quit()
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
-                pygame.quit()
                 quit()
     text_str = ""
     if player == 1 and player1won is True:
