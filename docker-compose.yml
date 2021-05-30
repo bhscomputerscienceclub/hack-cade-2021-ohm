@@ -6,5 +6,13 @@ services:
     volumes:
       - ./ircd.yaml:/ircd.yml:ro
     ports:
-      - "6667:6667"
+      - "29615:6667"
     restart: on-failure
+networks:
+  default:
+    enable_ipv6: true
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.57.0/24
+        - subnet: fd00:1234::/64
