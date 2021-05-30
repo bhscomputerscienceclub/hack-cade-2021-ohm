@@ -226,74 +226,74 @@ def main():
         clock.tick(30)
 
 
-# if __name__ == "__main__":
-#     global code, join, input_code
-#     main()
-#     if join is True:
-#         if input_code is not None:
-#             irc.init(input_code)
-#             x1, y1, x2, y2 = start_pos()
-#             player1 = snake(x1, y1, 1)
-#             player2 = snake(x2, y2, 2)
-#             while not game_over:
-#                 clock = pygame.time.Clock()
-#                 clock.tick(9)
-#                 for event in pygame.event.get():
-#                     if event.type == pygame.QUIT:
-#                         quit()
-#                     elif event.type == pygame.KEYDOWN:
-#                         if event.key == pygame.K_LEFT:
-#                             player1.left()
-#                         elif event.key == pygame.K_RIGHT:
-#                             player1.right()
-#                         elif event.key == pygame.K_UP:
-#                             player1.up()
-#                         elif event.key == pygame.K_DOWN:
-#                             player1.down()
-#                         elif event.key == pygame.K_ESCAPE:
-#                             quit()
-#
-#                 irc.send(player1.direction)
-#                 player2.direction = irc.actions[-1]
-#                 player1.update()
-#                 player2.update()
-#                 WIN.blit(background_surface, (0, 0))
-#                 player1.draw()
-#                 player2.draw()
-#                 pygame.display.update()
-#     else:
-#         if code is not None:
-#             if code is not None:
-#                 irc.init(code)
-#                 x1, y1, x2, y2 = start_pos()
-#                 player1 = snake(x1, y1, 1)
-#                 player2 = snake(x2, y2, 2)
-#                 while not game_over:
-#                     clock = pygame.time.Clock()
-#                     clock.tick(9)
-#                     for event in pygame.event.get():
-#                         if event.type == pygame.QUIT:
-#                             quit()
-#                         elif event.type == pygame.KEYDOWN:
-#                             if event.key == pygame.K_LEFT:
-#                                 player1.left()
-#                             elif event.key == pygame.K_RIGHT:
-#                                 player1.right()
-#                             elif event.key == pygame.K_UP:
-#                                 player1.up()
-#                             elif event.key == pygame.K_DOWN:
-#                                 player1.down()
-#                             elif event.key == pygame.K_ESCAPE:
-#                                 quit()
-#
-#                     irc.send(player1.direction)
-#                     player2.direction = irc.actions[-1]
-#                     player1.update()
-#                     player2.update()
-#                     WIN.blit(background_surface, (0, 0))
-#                     player1.draw()
-#                     player2.draw()
-#                     pygame.display.update()
+if __name__ == "__main__":
+    global code, join, input_code
+    main()
+    if join is True:
+        if input_code is not None:
+            irc.init(input_code)
+            x1, y1, x2, y2 = start_pos()
+            player1 = snake(x1, y1, 1)
+            player2 = snake(x2, y2, 2)
+            while not game_over:
+                clock = pygame.time.Clock()
+                clock.tick(9)
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        quit()
+                    elif event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_LEFT:
+                            player1.left()
+                        elif event.key == pygame.K_RIGHT:
+                            player1.right()
+                        elif event.key == pygame.K_UP:
+                            player1.up()
+                        elif event.key == pygame.K_DOWN:
+                            player1.down()
+                        elif event.key == pygame.K_ESCAPE:
+                            quit()
+
+                irc.send(player1.direction)
+                player2.direction = irc.actions[-1]
+                player1.update()
+                player2.update()
+                WIN.blit(background_surface, (0, 0))
+                player1.draw()
+                player2.draw()
+                pygame.display.update()
+    else:
+        if code is not None:
+            if code is not None:
+                irc.init(code)
+                x1, y1, x2, y2 = start_pos()
+                player1 = snake(x1, y1, 1)
+                player2 = snake(x2, y2, 2)
+                while not game_over:
+                    clock = pygame.time.Clock()
+                    clock.tick(9)
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            quit()
+                        elif event.type == pygame.KEYDOWN:
+                            if event.key == pygame.K_LEFT:
+                                player1.left()
+                            elif event.key == pygame.K_RIGHT:
+                                player1.right()
+                            elif event.key == pygame.K_UP:
+                                player1.up()
+                            elif event.key == pygame.K_DOWN:
+                                player1.down()
+                            elif event.key == pygame.K_ESCAPE:
+                                quit()
+
+                    irc.send(player1.direction)
+                    player2.direction = irc.actions[-1]
+                    player1.update()
+                    player2.update()
+                    WIN.blit(background_surface, (0, 0))
+                    player1.draw()
+                    player2.draw()
+                    pygame.display.update()
 
 text_str = ""
 if player == 1 and player1won is True:
