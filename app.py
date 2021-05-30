@@ -30,29 +30,36 @@ def quit_func():
 
 
 def start_pos():
+    if player == 2:
+        return irc.start_pos()
     x1 = random.randrange(0, WIDTH, 20)
     y1 = random.randrange(0, HEIGHT, 20)
     x2 = random.randrange(0, WIDTH, 20)
     y2 = random.randrange(0, HEIGHT, 20)
     if x1 is not x2 and y1 is not y2:
+        irc.set_start_pos(x1,y1,x2,y2)
         return x1, y1, x2, y2
     while x1 == x2 or y1 == y2:
         x1 = random.randrange(0, WIDTH, 20)
         y1 = random.randrange(0, HEIGHT, 20)
         x2 = random.randrange(0, WIDTH, 20)
         y2 = random.randrange(0, HEIGHT, 20)
+    irc.set_start_pos(x1,y1,x2,y2)
     return x1, y1, x2, y2
 
 
 def spawn_fruit():
     global fruity, fruitx
+    if player == 2:
+        return irc.spawn_fruit()
     fruitx = random.randrange(0, WIDTH, 20)
     fruity = random.randrange(0, HEIGHT, 20)
+    irc.fruit = (fruitx,fruity)
 
 
 class snake:
     def __init__(self, start_x, start_y, player):
-        self.direction = 0 # 0 is not moving 1 is left 2 is right 3 is up 4 is down
+        self.direction = 0  # 0 is not moving 1 is left 2 is right 3 is up 4 is down
         self.body = []
         self.player = player
         self.body.append([start_x, start_y])
@@ -60,9 +67,17 @@ class snake:
     def draw(self):
         for square_coords in self.body:
             if self.player == 1:
-                pygame.draw.rect(WIN, (0, 255, 0), pygame.Rect(square_coords[0], square_coords[1], 20, 20))
+                pygame.draw.rect(
+                    WIN,
+                    (0, 255, 0),
+                    pygame.Rect(square_coords[0], square_coords[1], 20, 20),
+                )
             else:
-                pygame.draw.rect(WIN, (0, 255, 255), pygame.Rect(square_coords[0], square_coords[1], 20, 20))
+                pygame.draw.rect(
+                    WIN,
+                    (0, 255, 255),
+                    pygame.Rect(square_coords[0], square_coords[1], 20, 20),
+                )
         else:
             pygame.draw.rect(WIN, (255, 0, 0), pygame.Rect(fruitx, fruity, 20, 20))
 
@@ -169,12 +184,12 @@ def main():
     screen = pygame.display.set_mode((640, 480))
     clock = pygame.time.Clock()
     input_box = pygame.Rect(100, 100, 140, 32)
-    color_inactive = pygame.Color('lightskyblue3')
-    color_active = pygame.Color('dodgerblue2')
+    color_inactive = pygame.Color("lightskyblue3")
+    color_active = pygame.Color("dodgerblue2")
     button = pygame.Rect(100, 350, 150, 50)
     color = color_inactive
     active = False
-    input_code = ''
+    input_code = ""
     done = False
     join = False
     while not done:
@@ -217,11 +232,11 @@ def main():
         txt_surface = STAT_FONT.render(input_code, True, color)
         txt_surface2 = STAT_FONT.render("Enter Code:", True, color)
         txt_surface3 = STAT_FONT.render("Create Game", True, (0, 0, 0))
-        width = max(200, txt_surface.get_width()+10)
+        width = max(200, txt_surface.get_width() + 10)
         input_box.w = width
-        screen.blit(txt_surface, (input_box.x+5, input_box.y+5))
-        screen.blit(txt_surface2, (input_box.x+5, input_box.y-25))
-        screen.blit(txt_surface3, (button.x+5, button.y+10))
+        screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
+        screen.blit(txt_surface2, (input_box.x + 5, input_box.y - 25))
+        screen.blit(txt_surface3, (button.x + 5, button.y + 10))
         pygame.draw.rect(screen, color, input_box, 2)
         pygame.display.flip()
         clock.tick(30)
@@ -231,17 +246,26 @@ if __name__ == "__main__":
     global code, join, input_code
     main()
     finalcode = 1
-    if join is True and input_code is not None: finalcode = input_code
-    elif code is not None: finalcode = code
-    else: print("something very wrong"); quit()
+    if join is True and input_code is not None:
+        finalcode = input_code
+    elif code is not None:
+        finalcode = code
+    else:
+        print("something very wrong")
+        quit()
 
     irc.init(finalcode)
-    if irc.twoppl(): player = 2
+    time.sleep(1)
+    if irc.twoppl():
+        player = 2
+    else:
+        spawn_fruit()
     while not irc.twoppl():
         WIN.fill((0, 0, 0))
         txt_surface = STAT_FONT.render("Waiting...", True, (255, 255, 255))
         WIN.blit(txt_surface, (250, 200))
         pygame.display.update()
+        time.sleep(0.1)
 
     x1, y1, x2, y2 = start_pos()
     player1 = snake(x1, y1, 1)
@@ -264,7 +288,7 @@ if __name__ == "__main__":
                 elif event.key == pygame.K_ESCAPE:
                     quit()
 
-        irc.send(player1.direction)
+        irc.senddir(player1.direction)
         player2.direction = irc.actions[-1]
         player1.update()
         player2.update()
@@ -272,16 +296,12 @@ if __name__ == "__main__":
         player1.draw()
         player2.draw()
         pygame.display.update()
- 
+
 
 text_str = ""
-if player == 1 and player1won is True:
+if player1won is True:
     text_str = "You Win!"
-elif player == 1 and player1won is False:
-    text_str = "Game Over!"
-elif player == 2 and player2won is True:
-    text_str = "You Win!"
-elif player == 2 and player2won is False:
+elif player1won is False:
     text_str = "Game Over!"
 
 while True:
@@ -299,5 +319,5 @@ while True:
     txt_surface1 = STAT_FONT.render("Quit1", True, (255, 255, 255))
     WIN.blit(txt_surface, (300, 250))
     pygame.draw.rect(WIN, [0, 0, 0], button)
-    WIN.blit(txt_surface1, (button.x+5, button.y+5))
+    WIN.blit(txt_surface1, (button.x + 5, button.y + 5))
     pygame.display.update()
