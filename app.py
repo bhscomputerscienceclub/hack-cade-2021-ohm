@@ -19,6 +19,7 @@ player1won = False
 player2won = False
 player = 1
 
+
 def start_pos():
     x1 = random.randrange(0, WIDTH, 20)
     y1 = random.randrange(0, HEIGHT, 20)
@@ -44,14 +45,18 @@ class snake:
 
     def __init__(self, start_x, start_y, player):
         self.direction = 0 # 0 is not moving 1 is left 2 is right 3 is up 4 is down
-        self.player = player
         self.body = []
+        self.player = player
         self.body.append([start_x, start_y])
 
     def draw(self):
         for square_coords in self.body:
-            pygame.draw.rect(WIN, (0, 255, 0), pygame.Rect(square_coords[0], square_coords[1], 20, 20))
-        pygame.draw.rect(WIN, (255, 0, 0), pygame.Rect(fruitx, fruity, 20, 20))
+            if self.player == 1:
+                pygame.draw.rect(WIN, (0, 255, 0), pygame.Rect(square_coords[0], square_coords[1], 20, 20))
+            else:
+                pygame.draw.rect(WIN, (0, 255, 255), pygame.Rect(square_coords[0], square_coords[1], 20, 20))
+        else:
+            pygame.draw.rect(WIN, (255, 0, 0), pygame.Rect(fruitx, fruity, 20, 20))
 
     def left(self):
         self.direction = 1
@@ -95,25 +100,41 @@ class snake:
                     game_over = True
 
     def update(self):
-        global game_over, hit
+        global game_over, hit, player2won, player1won
         count = len(self.body) - 1
         for square in self.body:
             if count == 0:
                 if self.direction == 1:
                     self.body[count][0] += -20
                     if self.body[count][0] < 0:
+                        if self.player == 1:
+                            player2won = True
+                        else:
+                            player1won = True
                         game_over = True
                 if self.direction == 2:
                     self.body[count][0] += 20
                     if self.body[count][0] > WIDTH:
+                        if self.player == 1:
+                            player2won = True
+                        else:
+                            player1won = True
                         game_over = True
                 if self.direction == 3:
                     self.body[count][1] += -20
                     if self.body[count][1] < 0:
+                        if self.player == 1:
+                            player2won = True
+                        else:
+                            player1won = True
                         game_over = True
                 if self.direction == 4:
                     self.body[count][1] += 20
                     if self.body[count][1] > HEIGHT:
+                        if self.player == 1:
+                            player2won = True
+                        else:
+                            player1won = True
                         game_over = True
             else:
                 x = self.body[count - 1][0]
@@ -135,7 +156,6 @@ class snake:
 
 if __name__ == "__main__":
     x1, y1, x2, y2 = start_pos()
-    print(x1, y1, x2, y2)
     player1 = snake(x1, y1, 1)
     player2 = snake(x2, y2, 2)
     while not game_over:
@@ -162,7 +182,6 @@ if __name__ == "__main__":
         WIN.blit(background_surface, (0, 0))
         player1.draw()
         player2.draw()
-        print(player1.body)
         pygame.display.update()
 
 
