@@ -2,11 +2,11 @@ import miniirc_extras
 import miniirc
 import random
 import time
-
+from typing import List
 
 irc = None
 code = ""
-actions: list[int] = [0]
+actions: List[int] = [0]
 prevsend = 0
 
 def init(codee: int = None):

@@ -11,7 +11,7 @@ pygame.init()
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Snake 2.0")
-STAT_FONT = pygame.freetype.SysFont("Sans", 50)
+STAT_FONT = pygame.font.Font(None, 32)
 background_surface = pygame.Surface((WIDTH, HEIGHT))
 background_surface.fill((0, 0, 0))
 game_over = False
@@ -156,39 +156,143 @@ class snake:
         self.hit()
 
 
-if __name__ == "__main__":
-    irc.init(123) 
-    x1, y1, x2, y2 = start_pos()
-    player1 = snake(x1, y1, 1)
-    player2 = snake(x2, y2, 2)
-    while not game_over:
-        clock = pygame.time.Clock()
-        clock.tick(9)
+def main():
+    global code, done, input_code, join
+    screen = pygame.display.set_mode((640, 480))
+    clock = pygame.time.Clock()
+    input_box = pygame.Rect(100, 100, 140, 32)
+    color_inactive = pygame.Color('lightskyblue3')
+    color_active = pygame.Color('dodgerblue2')
+    button = pygame.Rect(100, 350, 150, 50)
+    color = color_inactive
+    active = False
+    input_code = ''
+    done = False
+    join = False
+    while not done:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                done = True
                 pygame.quit()
                 quit()
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    player1.left()
-                elif event.key == pygame.K_RIGHT:
-                    player1.right()
-                elif event.key == pygame.K_UP:
-                    player1.up()
-                elif event.key == pygame.K_DOWN:
-                    player1.down()
-                elif event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if input_box.collidepoint(event.pos):
+                    active = not active
+                else:
+                    active = False
+                    if button.collidepoint(event.pos):
+                        WIN.fill((0, 0, 0))
+                        code = random.randint(0, 999999)
+                        text = STAT_FONT.render(f"Join code: {code}", True, color)
+                        clicked = False
+                        while True:
+                            screen.blit(text, (input_box.x + 5, input_box.y - 25))
+                            pygame.display.update()
+                            for event in pygame.event.get():
+                                if event.type == pygame.MOUSEBUTTONDOWN:
+                                    done = True
+                                    clicked = True
+                                    break
+                            if clicked:
+                                break
+                color = color_active if active else color_inactive
+            if event.type == pygame.KEYDOWN:
+                if active:
+                    if event.key == pygame.K_RETURN:
+                        join = True
+                        done = True
+                    elif event.key == pygame.K_BACKSPACE:
+                        input_code = input_code[:-1]
+                    else:
+                        input_code += event.unicode
 
-        irc.send(player1.direction)
-        player2.direction = irc.actions[-1]
-        player1.update()
-        player2.update()
-        WIN.blit(background_surface, (0, 0))
-        player1.draw()
-        player2.draw()
-        pygame.display.update()
+        screen.fill((30, 30, 30))
+        pygame.draw.rect(screen, [255, 255, 255], button)
+        txt_surface = STAT_FONT.render(input_code, True, color)
+        txt_surface2 = STAT_FONT.render("Enter Code:", True, color)
+        txt_surface3 = STAT_FONT.render("Create Game", True, (0, 0, 0))
+        width = max(200, txt_surface.get_width()+10)
+        input_box.w = width
+        screen.blit(txt_surface, (input_box.x+5, input_box.y+5))
+        screen.blit(txt_surface2, (input_box.x+5, input_box.y-25))
+        screen.blit(txt_surface3, (button.x+5, button.y+10))
+        pygame.draw.rect(screen, color, input_box, 2)
+        pygame.display.flip()
+        clock.tick(30)
+
+
+if __name__ == "__main__":
+    global code, join, input_code
+    main()
+    if join is True:
+        if input_code is not None:
+            irc.init(input_code)
+            x1, y1, x2, y2 = start_pos()
+            player1 = snake(x1, y1, 1)
+            player2 = snake(x2, y2, 2)
+            while not game_over:
+                clock = pygame.time.Clock()
+                clock.tick(9)
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        quit()
+                    elif event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_LEFT:
+                            player1.left()
+                        elif event.key == pygame.K_RIGHT:
+                            player1.right()
+                        elif event.key == pygame.K_UP:
+                            player1.up()
+                        elif event.key == pygame.K_DOWN:
+                            player1.down()
+                        elif event.key == pygame.K_ESCAPE:
+                            pygame.quit()
+                            quit()
+
+                irc.send(player1.direction)
+                player2.direction = irc.actions[-1]
+                player1.update()
+                player2.update()
+                WIN.blit(background_surface, (0, 0))
+                player1.draw()
+                player2.draw()
+                pygame.display.update()
+    else:
+        if code is not None:
+            if code is not None:
+                irc.init(code)
+                x1, y1, x2, y2 = start_pos()
+                player1 = snake(x1, y1, 1)
+                player2 = snake(x2, y2, 2)
+                while not game_over:
+                    clock = pygame.time.Clock()
+                    clock.tick(9)
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            pygame.quit()
+                            quit()
+                        elif event.type == pygame.KEYDOWN:
+                            if event.key == pygame.K_LEFT:
+                                player1.left()
+                            elif event.key == pygame.K_RIGHT:
+                                player1.right()
+                            elif event.key == pygame.K_UP:
+                                player1.up()
+                            elif event.key == pygame.K_DOWN:
+                                player1.down()
+                            elif event.key == pygame.K_ESCAPE:
+                                pygame.quit()
+                                quit()
+
+                    irc.send(player1.direction)
+                    player2.direction = irc.actions[-1]
+                    player1.update()
+                    player2.update()
+                    WIN.blit(background_surface, (0, 0))
+                    player1.draw()
+                    player2.draw()
+                    pygame.display.update()
 
 
 while True:
