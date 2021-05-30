@@ -21,6 +21,10 @@ player2won = False
 player = 1
 
 
+def wait():
+
+
+
 def quit():
     pygame.quit()
     irc.irc.disconnect()
