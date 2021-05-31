@@ -3,7 +3,7 @@ Snake V2.0
 password is ~~59vff36vfb~~ changed on linode so not anymore haha  
 
 Devpost: <https://devpost.com/software/snake-2-0>  
-Demo: <https://youtu.be/lVMGMdsv19Q>
+Demo: <https://youtu.be/lVMGMdsv19Q> - /ipfs/Qmds73tTMB4wzW71fPVKYrCf3YzsXCSjEbgMTuxypZqUmM (might not be up on ipfs btw but just putting it here for future proofing)
 
 ## Categories 
 - Linode Cloud - IRC Server Hosting
